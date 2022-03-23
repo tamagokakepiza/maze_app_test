@@ -12,6 +12,12 @@ typedef struct {
   enum MazeFlag flag;                       //ブロックが判明しているかどうか
 } MazeBlock;
 
+//プレイヤー
+typedef struct {
+  int row;                                  //プレイヤー位置(行)
+  int column;                               //プレイヤー位置(列)
+} MazePlayer;
+
 //迷路表示
 void MazeDraw(MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
   int i, j;
