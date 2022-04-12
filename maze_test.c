@@ -62,6 +62,9 @@ void MazeDraw(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COL
   }
 }
 
+//方向
+enum MazeDirection{UP, DOWN, LEFT, RIGHT, Invalid};
+
 int main(void) {
   //迷路
   MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
