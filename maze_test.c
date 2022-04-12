@@ -5,11 +5,10 @@
 
 //迷路のーブロック
 enum MazeKind {PATH, WALL, START, GOAL};    //ブロックの種類(道、壁、スタート、ゴール)
-enum MazeFlag {FALSE, TRUE};                //ブロックが判明しているかどうか
-
+enum MazeFlag {FALSE, TRUE};                //ブロックの判定
 typedef struct {
   enum MazeKind kind;                       //種類(道、壁、スタート、ゴール)
-  enum MazeFlag flag;                       //ブロックが判明しているかどうか
+  enum MazeFlag flag;                       //ブロックの判定
 } MazeBlock;
 
 //プレイヤー
@@ -17,6 +16,24 @@ typedef struct {
   int row;                                  //プレイヤー位置(行)
   int column;                               //プレイヤー位置(列)
 } MazePlayer;
+
+//プレイヤーの初期化
+int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
+  int i, j;
+
+  for(i = 0; i < MAZE_ROW; i++) {         //行
+    for(j = 0; j < MAZE_COLUMN; j++) {    //列
+      if(maze[i][j].kind == START) {                                               //スタート地点の場合
+        *playerRow = i;
+        *playerColumn = j;
+        return 0;
+      }
+    }
+  }
+
+  printf("スタートがありません\n");                                                   //スタート地点がない場合
+  return -1;
+}
 
 //迷路表示
 void MazeDraw(MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
@@ -45,8 +62,7 @@ void MazeDraw(MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
 
 int main(void) {
   //迷路
-  MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = 
-    {
+  MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
       { {START, TRUE } , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE} },
       { {WALL , FALSE} , {WALL , FALSE}, {PATH , FALSE}, {WALL , FALSE}, {WALL , FALSE} },
       { {WALL , FALSE} , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE} },
