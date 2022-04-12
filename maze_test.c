@@ -3,7 +3,7 @@
 #define MAZE_ROW    5                         //迷路の行数
 #define MAZE_COLUMN 5                         //迷路の列数
 
-//迷路のーブロック
+//迷路のブロック
 enum MazeKind {PATH, WALL, START, GOAL};      //ブロックの種類(道、壁、スタート、ゴール)
 enum MazeFlag {FALSE, TRUE};                  //ブロックの判定
 typedef struct {
@@ -72,8 +72,16 @@ int main(void) {
     { {WALL , FALSE} , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {GOAL , TRUE } },
   };
 
+  //プレイヤー
+  MazePlayer player;
+
+  //プレイヤーの初期化
+  if(MazePlayerInit(&player.row, &player.column, maze) == -1) {
+    return 0;
+  }
+
   //迷路表示
-  MazeDraw(maze);
+  MazeDraw(player.row, player.column, maze);
 
   return 0;
 }
