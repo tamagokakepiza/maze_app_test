@@ -77,7 +77,7 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
   printf("数字を入力して下さい--");
 
   fgets(buf, sizeof(buf), stdin);
-  scanf(buf, "%d", &direction);
+  sscanf(buf, "%d", &direction);
 
   while(direction < 0 || direction > (Invalid -1)) {
     printf("入力が不正です 再入力して下さい--");
