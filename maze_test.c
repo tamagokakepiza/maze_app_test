@@ -149,6 +149,15 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
   return 0;
 }
 
+//ゴールの判定
+int MazeGoalCheck(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
+  if(maze [playerRow][playerColumn].kind == GOAL) {
+    printf("ゴール！ステージクリアです--\n");
+    return 1;
+  }
+  return 0;
+}
+
 int main(void) {
   //迷路
   MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
