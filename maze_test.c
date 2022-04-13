@@ -184,8 +184,8 @@ int main(void) {
     MazePlayerMove(&player.row, &player.column, maze);
   }
   
-  //ステージクリア
-  MazeGoalCheck(player.row, player.column, maze);
+  //ステージの結果表示
+  MazeDraw(player.row, player.column, maze);
 
   return 0;
 }
