@@ -35,7 +35,7 @@ int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][M
   return -1;
 }
 
-//迷路表示
+//迷路の表示
 void MazeDraw(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
   int i, j;
   for(i = 0; i < MAZE_ROW; i++) {             //行
@@ -146,7 +146,6 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
       }
       break;
   }
-  return 0;
 }
 
 //ゴールの判定
@@ -176,8 +175,17 @@ int main(void) {
     return 0;
   }
 
-  //迷路表示
-  MazeDraw(player.row, player.column, maze);
+
+  //ゲームプレイ
+  while(MazeGoalCheck(player.row, player.column, maze) != 1) {
+    //迷路の表示
+    MazeDraw(player.row, player.column, maze);
+    //プレイヤーの移動
+    MazePlayerMove(&player.row, &player.column, maze);
+  }
+  
+  //ステージクリア
+  MazeGoalCheck(player.row, player.column, maze);
 
   return 0;
 }
