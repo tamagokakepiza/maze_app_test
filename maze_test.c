@@ -17,6 +17,9 @@ typedef struct {
   int column;                                 //プレイヤー位置(列)
 } MazePlayer;
 
+//メニュー
+enum MazeMenu {STAGE0, EXIT};
+
 //プレイヤーの初期化
 int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
   int i, j;
@@ -157,7 +160,7 @@ int MazeGoalCheck(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE
   return 0;
 }
 
-int main(void) {
+void MazeGame(void) {
   //迷路
   MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
     { {START, TRUE } , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE} },
@@ -172,7 +175,7 @@ int main(void) {
 
   //プレイヤーの初期化
   if(MazePlayerInit(&player.row, &player.column, maze) == -1) {
-    return 0;
+    return;
   }
 
 
@@ -187,5 +190,5 @@ int main(void) {
   //ステージの結果表示
   MazeDraw(player.row, player.column, maze);
 
-  return 0;
+  return;
 }
