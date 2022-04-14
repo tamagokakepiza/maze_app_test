@@ -17,6 +17,32 @@ typedef struct {
   int column;                                 //プレイヤー位置(列)
 } MazePlayer;
 
+//メニュー
+enum MazeMenu {STAGE0, EXIT};
+
+//タイトル
+int MazeTitle() {
+  char buf[100];
+  int menu = -1;
+
+  printf("\n\n---迷路ゲーム---\n\n");
+  printf("メニュー\n");
+  printf("%d:ステージ0\n", STAGE0);
+  printf("%d:終了\n", EXIT);
+  printf("メニューを選んで数字を入力して下さい--");
+
+  fgets(buf, sizeof(buf), stdin);
+  sscanf(buf, "%d", &menu);
+
+  while(menu < 0 || menu > EXIT) {
+    printf("入力が不正です。再入力してください--");
+    fgets(buf, sizeof(buf), stdin);
+    sscanf(buf, "%d", &menu);
+  }
+
+  return menu;
+}
+
 //プレイヤーの初期化
 int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
   int i, j;
@@ -157,7 +183,8 @@ int MazeGoalCheck(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE
   return 0;
 }
 
-int main(void) {
+//ゲーム
+void MazeGame(void) {
   //迷路
   MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
     { {START, TRUE } , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE} },
@@ -172,7 +199,7 @@ int main(void) {
 
   //プレイヤーの初期化
   if(MazePlayerInit(&player.row, &player.column, maze) == -1) {
-    return 0;
+    return;
   }
 
 
@@ -186,6 +213,24 @@ int main(void) {
   
   //ステージの結果表示
   MazeDraw(player.row, player.column, maze);
+}
+
+int main(void) {
+  int menu;
+
+  while(1) {
+    //メニュー
+    menu = MazeTitle();
+    printf("\n");
+
+    //ゲーム終了
+    if(menu == EXIT) {
+      break;
+    }
+
+    //ゲーム
+    MazeGame();
+  }
 
   return 0;
 }
