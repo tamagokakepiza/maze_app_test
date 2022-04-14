@@ -183,6 +183,7 @@ int MazeGoalCheck(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE
   return 0;
 }
 
+//ゲーム
 void MazeGame(void) {
   //迷路
   MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
@@ -212,6 +213,24 @@ void MazeGame(void) {
   
   //ステージの結果表示
   MazeDraw(player.row, player.column, maze);
+}
 
-  return;
+int main(void) {
+  int menu;
+
+  while(1) {
+    //メニュー
+    menu = MazeTitle();
+    printf("\n");
+
+    //ゲーム終了
+    if(menu == EXIT) {
+      break;
+    }
+
+    //ゲーム
+    MazeGame();
+  }
+
+  return 0;
 }
