@@ -20,6 +20,29 @@ typedef struct {
 //メニュー
 enum MazeMenu {STAGE0, EXIT};
 
+//タイトル
+int MazeTitle() {
+  char buf[100];
+  int menu = -1;
+
+  printf("\n\n---迷路ゲーム---\n\n");
+  printf("メニュー\n");
+  printf("%d:ステージ0\n", STAGE0);
+  printf("%d:終了\n", EXIT);
+  printf("メニューを選んで数字を入力して下さい--");
+
+  fgets(buf, sizeof(buf), stdin);
+  sscanf(buf, "%d", &menu);
+
+  while(menu < 0 || menu > EXIT) {
+    printf("入力が不正です。再入力してください--");
+    fgets(buf, sizeof(buf), stdin);
+    sscanf(buf, "%d", &menu);
+  }
+
+  return menu;
+}
+
 //プレイヤーの初期化
 int MazePlayerInit(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][MAZE_COLUMN]) {
   int i, j;
