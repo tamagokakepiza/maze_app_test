@@ -2,6 +2,7 @@
 
 #define MAZE_ROW    5                         //迷路の行数
 #define MAZE_COLUMN 5                         //迷路の列数
+#define STAGE       2                         //ステージ数
 
 //迷路のブロック
 enum MazeKind {PATH, WALL, START, GOAL};      //ブロックの種類(道、壁、スタート、ゴール)
