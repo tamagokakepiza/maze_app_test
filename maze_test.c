@@ -1,8 +1,8 @@
 #include <stdio.h>
 
+#define STAGE       2                         //ステージ数
 #define MAZE_ROW    5                         //迷路の行数
 #define MAZE_COLUMN 5                         //迷路の列数
-#define STAGE       2                         //ステージ数
 
 //迷路のブロック
 enum MazeKind {PATH, WALL, START, GOAL};      //ブロックの種類(道、壁、スタート、ゴール)
@@ -19,7 +19,7 @@ typedef struct {
 } MazePlayer;
 
 //メニュー
-enum MazeMenu {STAGE0, EXIT};
+enum MazeMenu {STAGE0, STAGE1, EXIT};
 
 //タイトル
 int MazeTitle() {
@@ -29,6 +29,7 @@ int MazeTitle() {
   printf("\n\n---迷路ゲーム---\n\n");
   printf("メニュー\n");
   printf("%d:ステージ0\n", STAGE0);
+  printf("%d:ステージ1\n", STAGE1);
   printf("%d:終了\n", EXIT);
   printf("メニューを選んで数字を入力して下さい--");
 
@@ -114,7 +115,7 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
 
   switch(direction) {
     //上へ移動
-    case UP:
+    case UP: {
       if(*playerRow - 1 >= 0) {
         maze[*playerRow - 1][*playerColumn].flag = TRUE;
         if(maze[*playerRow - 1][*playerColumn].kind != WALL) {
@@ -126,10 +127,11 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
       } else {
         printf("\n範囲外です--\n");
       }
+    }
     break;
 
     //下へ移動
-    case DOWN:
+    case DOWN: {
       if(*playerRow + 1 <= MAZE_ROW) {
         maze[*playerRow + 1][*playerColumn].flag = TRUE;
         if(maze[*playerRow + 1][*playerColumn].kind != WALL) {
@@ -141,10 +143,11 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
       } else {
         printf("\n範囲外です--\n");
       }
-      break;
+    }
+    break;
 
     //左へ移動
-    case LEFT:
+    case LEFT: {
       if(*playerColumn - 1 >= 0) {
         maze[*playerRow][*playerColumn - 1].flag = TRUE;
         if(maze[*playerRow][*playerColumn - 1].kind != WALL) {
@@ -156,10 +159,11 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
       } else {
         printf("\n範囲外です--\n");
       }
-      break;
+    }
+    break;
 
     //右へ移動
-    case RIGHT:
+    case RIGHT: {
       if(*playerColumn + 1 <= MAZE_COLUMN) {
         maze[*playerRow][*playerColumn + 1].flag = TRUE;
         if(maze[*playerRow][*playerColumn + 1].kind != WALL) {
@@ -171,7 +175,8 @@ void MazePlayerMove(int *playerRow, int *playerColumn, MazeBlock maze[MAZE_ROW][
       } else {
         printf("\n範囲外です--\n");
       }
-      break;
+    }
+    break;
   }
 }
 
@@ -185,52 +190,72 @@ int MazeGoalCheck(int playerRow, int playerColumn, MazeBlock maze[MAZE_ROW][MAZE
 }
 
 //ゲーム
-void MazeGame(void) {
+void MazeGame(int stage) {
   //迷路
-  MazeBlock maze[MAZE_ROW][MAZE_COLUMN] = {
+  MazeBlock maze[STAGE][MAZE_ROW][MAZE_COLUMN] = {
+    { //STAGE0
     { {START, TRUE } , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE} },
     { {WALL , FALSE} , {WALL , FALSE}, {PATH , FALSE}, {WALL , FALSE}, {WALL , FALSE} },
     { {WALL , FALSE} , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE} },
     { {PATH , FALSE} , {PATH , FALSE}, {WALL , FALSE}, {WALL , FALSE}, {WALL , FALSE} },
     { {WALL , FALSE} , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {GOAL , TRUE } },
+    }, 
+    { //STAGE1
+    { {WALL , FALSE} , {WALL , FALSE}, {START, TRUE }, {WALL , FALSE}, {WALL , FALSE} },
+    { {PATH , FALSE} , {PATH , FALSE}, {PATH , FALSE}, {PATH , FALSE}, {WALL , FALSE} },
+    { {PATH , FALSE} , {WALL , FALSE}, {WALL , FALSE}, {PATH , FALSE}, {WALL , FALSE} },
+    { {PATH , FALSE} , {PATH , FALSE}, {PATH , FALSE}, {WALL , FALSE}, {WALL , FALSE} },
+    { {WALL , FALSE} , {WALL , FALSE}, {GOAL , TRUE }, {WALL , FALSE}, {WALL , FALSE} },
+    }
   };
 
   //プレイヤー
   MazePlayer player;
 
   //プレイヤーの初期化
-  if(MazePlayerInit(&player.row, &player.column, maze) == -1) {
+  if(MazePlayerInit(&player.row, &player.column, maze[stage]) == -1) {
     return;
   }
 
 
   //ゲームプレイ
-  while(MazeGoalCheck(player.row, player.column, maze) != 1) {
+  while(MazeGoalCheck(player.row, player.column, maze[stage]) != 1) {
     //迷路の表示
-    MazeDraw(player.row, player.column, maze);
+    MazeDraw(player.row, player.column, maze[stage]);
     //プレイヤーの移動
-    MazePlayerMove(&player.row, &player.column, maze);
+    MazePlayerMove(&player.row, &player.column, maze[stage]);
   }
   
   //ステージの結果表示
-  MazeDraw(player.row, player.column, maze);
+  MazeDraw(player.row, player.column, maze[stage]);
 }
 
 int main(void) {
   int menu;
+  int stage;
 
   while(1) {
     //メニュー
     menu = MazeTitle();
     printf("\n");
 
-    //ゲーム終了
-    if(menu == EXIT) {
+   
+    if(menu == EXIT) { //ゲーム終了
       break;
+    } else { //ステージ設定
+      switch(menu){
+        case STAGE0:
+          stage = 0;
+          break;
+
+        case STAGE1:
+          stage = 1;
+          break;
+      }
     }
 
     //ゲーム
-    MazeGame();
+    MazeGame(stage);
   }
 
   return 0;
